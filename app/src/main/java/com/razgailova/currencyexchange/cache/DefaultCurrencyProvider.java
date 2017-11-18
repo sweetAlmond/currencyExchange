@@ -3,6 +3,8 @@ package com.razgailova.currencyexchange.cache;
 import android.content.Context;
 import android.content.res.AssetManager;
 
+import com.razgailova.currencyexchange.BuildConfig;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -12,14 +14,12 @@ import java.io.InputStream;
 
 public class DefaultCurrencyProvider extends CurrencyProvider {
 
-    private static final String FILE_NAME = "default_currency";
-
     @Override
     protected String load(Context context) {
         String xmlString = null;
         AssetManager am = context.getAssets();
         try {
-            InputStream is = am.open(FILE_NAME);
+            InputStream is = am.open(BuildConfig.DEFAULT_CONTAINER);
             int length = is.available();
             byte[] data = new byte[length];
             is.read(data);
