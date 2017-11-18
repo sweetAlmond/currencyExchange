@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.razgailova.currencyexchange.BuildConfig;
-import com.razgailova.currencyexchange.cache.provider.CurrencyProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,18 +15,14 @@ import java.io.InputStream;
 public class DefaultCurrencyProvider extends CurrencyProvider {
 
     @Override
-    protected String load(Context context) {
-        String xmlString = null;
-        AssetManager am = context.getAssets();
-        try {
-            InputStream is = am.open(BuildConfig.DEFAULT_CONTAINER);
-            int length = is.available();
-            byte[] data = new byte[length];
-            is.read(data);
-            xmlString = new String(data);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        return xmlString;
+    protected String load(Context context) throws IOException {
+        AssetManager assetManager = context.getAssets();
+
+        InputStream inputStream = assetManager.open(BuildConfig.DEFAULT_CONTAINER);
+        int length = inputStream.available();
+        byte[] data = new byte[length];
+        inputStream.read(data);
+        return new String(data);
     }
+
 }

@@ -2,11 +2,14 @@ package com.razgailova.currencyexchange.cache;
 
 import android.support.annotation.NonNull;
 
+import com.razgailova.currencyexchange.MyApplication;
+import com.razgailova.currencyexchange.cache.loader.ILoader;
 import com.razgailova.currencyexchange.cache.loader.LoadingListener;
 import com.razgailova.currencyexchange.cache.loader.LoadingManager;
-import com.razgailova.currencyexchange.data.ValCurs;
+import com.razgailova.currencyexchange.data.ExchangeRates;
+import com.razgailova.currencyexchange.data.Valute;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Created by Катерина on 15.11.2017.
@@ -16,13 +19,7 @@ public class CurrencyCache {
 
     private static CurrencyCache mInstance;
 
-    private LoadingManager mLoader;
-
-    private ValCurs mData;
-
-    private CurrencyCache() {
-        mLoader = new LoadingManager();
-    }
+    private ExchangeRates mData;
 
     public static synchronized CurrencyCache getInstance() {
         if (mInstance == null) {
@@ -32,10 +29,12 @@ public class CurrencyCache {
         return mInstance;
     }
 
-    public void init(@NonNull final CurrencyCacheInitListener listener) {
-        mLoader.load(new LoadingListener() {
+    public void init(@NonNull final CacheInitListener listener) {
+        ILoader loader = new LoadingManager(MyApplication.getContext());
+
+        loader.load(new LoadingListener() {
             @Override
-            public void onDataLoaded(ValCurs data) {
+            public void onDataLoaded(ExchangeRates data) {
                 mData = data;
                 listener.onInitFinished();
             }
@@ -47,14 +46,12 @@ public class CurrencyCache {
         });
     }
 
-    public List<Object> getCurrencyList() {
-        // TODO
-        return null;
+    public Collection<Valute> getCurrencyCollection() {
+        return mData.getCurrencyMap().values();
     }
 
-    public Object getCurrencyById(int id) {
-        // TODO
-        return null;
+    public Valute getCurrencyById(String id) {
+        return mData.getCurrency(id);
     }
 
 }

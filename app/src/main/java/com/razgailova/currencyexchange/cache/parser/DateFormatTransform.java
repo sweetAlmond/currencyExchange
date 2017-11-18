@@ -1,4 +1,4 @@
-package com.razgailova.currencyexchange.cache.parcer;
+package com.razgailova.currencyexchange.cache.parser;
 
 import org.simpleframework.xml.transform.Transform;
 
@@ -9,11 +9,11 @@ import java.util.Date;
  * Created by Катерина on 18.11.2017.
  */
 
-public class DateFormatTransformer implements Transform<Date> {
+public class DateFormatTransform implements Transform<Date> {
     private DateFormat dateFormat;
 
 
-    public DateFormatTransformer(DateFormat dateFormat) {
+    public DateFormatTransform(DateFormat dateFormat) {
         this.dateFormat = dateFormat;
     }
 

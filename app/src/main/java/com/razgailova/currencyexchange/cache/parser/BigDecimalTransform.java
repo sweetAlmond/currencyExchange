@@ -1,4 +1,4 @@
-package com.razgailova.currencyexchange.cache.parcer;
+package com.razgailova.currencyexchange.cache.parser;
 
 import org.simpleframework.xml.transform.Transform;
 
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
  * Created by Катерина on 18.11.2017.
  */
 
-public class BigDecimalTransformer implements Transform<BigDecimal> {
+public class BigDecimalTransform implements Transform<BigDecimal> {
 
     @Override
     public BigDecimal read(String value) throws Exception {

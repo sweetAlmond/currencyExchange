@@ -1,4 +1,6 @@
-package com.razgailova.currencyexchange.data;
+package com.razgailova.currencyexchange.cache.parser.data;
+
+import com.razgailova.currencyexchange.data.Valute;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;

@@ -7,19 +7,19 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 
 import com.razgailova.currencyexchange.MyApplication;
-import com.razgailova.currencyexchange.data.ValCurs;
+import com.razgailova.currencyexchange.data.ExchangeRates;
 
 /**
  * Created by Катерина on 15.11.2017.
  */
 
-public class LoadingManager {
+public class LoadingManager implements ILoader {
 
     private Context mContext;
     private LoadingListener mLoadingListener;
 
-    public LoadingManager() {
-        mContext = MyApplication.getContext();
+    public LoadingManager(Context context) {
+        mContext = context;
     }
 
     @SuppressLint("HandlerLeak")
@@ -35,7 +35,7 @@ public class LoadingManager {
                 case LOCAL:
                 case SERVER:
                     if(!mProcessed) {
-                        mLoadingListener.onDataLoaded((ValCurs) msg.obj);
+                        mLoadingListener.onDataLoaded((ExchangeRates) msg.obj);
                         mProcessed = true;
                     }
                     break;
@@ -51,7 +51,7 @@ public class LoadingManager {
 
     public void load(@NonNull LoadingListener listener) {
         mLoadingListener = listener;
-        load(new LoadLocalOrDefaultRunnable(mContext, mLoadingHandler));
+        load(new LoadLocatRunnable(mContext, mLoadingHandler));
         load(new LoadServerRunnable(mContext, mLoadingHandler));
     }
 

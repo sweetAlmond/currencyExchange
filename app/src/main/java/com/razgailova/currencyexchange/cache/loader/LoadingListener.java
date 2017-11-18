@@ -1,6 +1,6 @@
 package com.razgailova.currencyexchange.cache.loader;
 
-import com.razgailova.currencyexchange.data.ValCurs;
+import com.razgailova.currencyexchange.data.ExchangeRates;
 
 /**
  * Created by Катерина on 16.11.2017.
@@ -8,7 +8,7 @@ import com.razgailova.currencyexchange.data.ValCurs;
 
 public interface LoadingListener {
 
-    void onDataLoaded(ValCurs data);
+    void onDataLoaded(ExchangeRates data);
 
     void onError();
 }
