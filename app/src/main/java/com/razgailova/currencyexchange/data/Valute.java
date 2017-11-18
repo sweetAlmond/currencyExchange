@@ -4,6 +4,8 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.math.BigDecimal;
+
 /**
  * Created by Катерина on 16.11.2017.
  */
@@ -27,7 +29,7 @@ public class Valute {
     private String name;
 
     @Element(name = "Value")
-    private String value;
+    private BigDecimal value;
 
     public String getId() {
         return id;
@@ -49,7 +51,7 @@ public class Valute {
         return name;
     }
 
-    public String getValue() {
+    public BigDecimal getValue() {
         return value;
     }
 }

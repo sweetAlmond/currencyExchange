@@ -4,6 +4,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
 public class ValCurs {
 
     @Attribute(name = "Date")
-    private String date;
+    private Date date;
 
     @Attribute
     private String name;
@@ -22,7 +23,7 @@ public class ValCurs {
     @ElementList(inline = true)
     private List<Valute> valutes;
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
