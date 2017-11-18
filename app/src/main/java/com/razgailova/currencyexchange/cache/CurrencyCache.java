@@ -2,6 +2,8 @@ package com.razgailova.currencyexchange.cache;
 
 import android.support.annotation.NonNull;
 
+import com.razgailova.currencyexchange.cache.loader.LoadingListener;
+import com.razgailova.currencyexchange.cache.loader.LoadingManager;
 import com.razgailova.currencyexchange.data.ValCurs;
 
 import java.util.List;

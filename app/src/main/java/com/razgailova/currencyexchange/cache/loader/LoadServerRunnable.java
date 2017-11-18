@@ -1,13 +1,11 @@
-package com.razgailova.currencyexchange.cache;
+package com.razgailova.currencyexchange.cache.loader;
 
 import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 
+import com.razgailova.currencyexchange.cache.provider.ServiceCurrencyProvider;
 import com.razgailova.currencyexchange.data.ValCurs;
-
-import static com.razgailova.currencyexchange.cache.LoadingState.ERROR;
-import static com.razgailova.currencyexchange.cache.LoadingState.SERVER;
 
 /**
  * Created by Катерина on 16.11.2017.
@@ -28,12 +26,12 @@ public class LoadServerRunnable implements Runnable {
         ValCurs data = new ServiceCurrencyProvider().getCurrency(mContext);
 
         if(data != null) {
-            Message completeMessage = mHandler.obtainMessage(SERVER.getValue(), data);
+            Message completeMessage = mHandler.obtainMessage(LoadingState.SERVER.getValue(), data);
             completeMessage.sendToTarget();
             return;
         }
 
-        Message completeMessage = mHandler.obtainMessage(ERROR.getValue(), data);
+        Message completeMessage = mHandler.obtainMessage(LoadingState.ERROR.getValue(), data);
         completeMessage.sendToTarget();
 
         // TODO write data to local file

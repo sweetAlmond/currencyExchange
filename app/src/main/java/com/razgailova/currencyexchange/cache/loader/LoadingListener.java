@@ -1,4 +1,4 @@
-package com.razgailova.currencyexchange.cache;
+package com.razgailova.currencyexchange.cache.loader;
 
 import com.razgailova.currencyexchange.data.ValCurs;
 

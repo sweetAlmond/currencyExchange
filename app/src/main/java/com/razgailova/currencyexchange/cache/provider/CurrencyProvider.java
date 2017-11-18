@@ -1,8 +1,10 @@
-package com.razgailova.currencyexchange.cache;
+package com.razgailova.currencyexchange.cache.provider;
 
 import android.content.Context;
 import android.util.Log;
 
+import com.razgailova.currencyexchange.cache.parcer.BigDecimalTransformer;
+import com.razgailova.currencyexchange.cache.parcer.DateFormatTransformer;
 import com.razgailova.currencyexchange.data.ValCurs;
 
 import org.simpleframework.xml.core.Persister;

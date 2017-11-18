@@ -1,4 +1,4 @@
-package com.razgailova.currencyexchange.cache;
+package com.razgailova.currencyexchange.cache.loader;
 
 /**
  * Created by Катерина on 16.11.2017.

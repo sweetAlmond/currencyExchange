@@ -1,9 +1,10 @@
-package com.razgailova.currencyexchange.cache;
+package com.razgailova.currencyexchange.cache.provider;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.razgailova.currencyexchange.BuildConfig;
+import com.razgailova.currencyexchange.cache.provider.CurrencyProvider;
 
 import java.io.IOException;
 import java.io.InputStream;

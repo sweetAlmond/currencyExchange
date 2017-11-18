@@ -1,4 +1,4 @@
-package com.razgailova.currencyexchange.cache;
+package com.razgailova.currencyexchange.cache.parcer;
 
 import org.simpleframework.xml.transform.Transform;
 
