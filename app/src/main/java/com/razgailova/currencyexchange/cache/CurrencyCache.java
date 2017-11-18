@@ -17,7 +17,6 @@ public class CurrencyCache {
     private static CurrencyCache mInstance;
 
     private LoadingManager mLoader;
-    private CurrencyCacheInitListener mInitListener;
 
     private ValCurs mData;
 
@@ -33,13 +32,12 @@ public class CurrencyCache {
         return mInstance;
     }
 
-    public void init(@NonNull CurrencyCacheInitListener listener) {
-        mInitListener = listener;
+    public void init(@NonNull final CurrencyCacheInitListener listener) {
         mLoader.load(new LoadingListener() {
             @Override
             public void onDataLoaded(ValCurs data) {
                 mData = data;
-                mInitListener.onInitFinished();
+                listener.onInitFinished();
             }
 
             @Override
