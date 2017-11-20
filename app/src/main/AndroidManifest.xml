@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".MyApplication">
-        <activity android:name=".SplashActivity"
+        <activity android:name=".presentation.screens.start.StartActivity"
             android:noHistory="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".presentation.screens.converter.VoluteConverterActivity"/>
     </application>
 
 </manifest>

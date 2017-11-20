@@ -1,5 +1,7 @@
 package com.razgailova.currencyexchange.data;
 
+import com.razgailova.currencyexchange.data.model.Volute;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,14 +14,18 @@ public class ExchangeRates {
 
     private Date mDate;
 
-    private Map<String, Valute> mCurrencyMap;
+    private Map<String, Volute> mCurrencyMap;
 
-    public ExchangeRates(Date date) {
+    public ExchangeRates(Date date, Map<String, Volute> currencyRates) {
         mDate = date;
-        mCurrencyMap = new HashMap<>();
+        mCurrencyMap = currencyRates;
     }
 
-    public void addCurrency(Valute currency) {
+    public ExchangeRates(Date date) {
+        this(date, new HashMap<String, Volute>());
+    }
+
+    public void addCurrency(Volute currency) {
         mCurrencyMap.put(currency.getId(), currency);
     }
 
@@ -27,11 +33,11 @@ public class ExchangeRates {
         return mDate;
     }
 
-    public Map<String, Valute> getCurrencyMap() {
+    public Map<String, Volute> getCurrencyMap() {
         return mCurrencyMap;
     }
 
-    public Valute getCurrency(String id) {
+    public Volute getCurrency(String id) {
         return mCurrencyMap.get(id);
     }
 
