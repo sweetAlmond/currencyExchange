@@ -11,6 +11,5 @@ public class ServiceCurrencyProvider extends CurrencyProvider {
     @Override
     protected String load(Context context) {
         return null;
-
     }
 }

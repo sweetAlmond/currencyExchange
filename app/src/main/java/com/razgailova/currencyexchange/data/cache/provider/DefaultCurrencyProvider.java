@@ -17,7 +17,7 @@ public class DefaultCurrencyProvider extends CurrencyProvider {
     @Override
     protected String load(Context context) throws IOException {
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

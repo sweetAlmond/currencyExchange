@@ -65,4 +65,9 @@ public class Volute {
     public BigDecimal getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return charCode;
+    }
 }

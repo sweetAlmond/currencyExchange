@@ -3,17 +3,21 @@ package com.razgailova.currencyexchange.data.cache;
 import android.support.annotation.NonNull;
 
 import com.razgailova.currencyexchange.MyApplication;
+import com.razgailova.currencyexchange.data.ExchangeRates;
 import com.razgailova.currencyexchange.data.cache.loader.ILoader;
 import com.razgailova.currencyexchange.data.cache.loader.LoadingListener;
 import com.razgailova.currencyexchange.data.cache.loader.LoadingManager;
-import com.razgailova.currencyexchange.data.ExchangeRates;
+import com.razgailova.currencyexchange.data.database.CurrencyRatesDatabase;
 import com.razgailova.currencyexchange.data.model.Volute;
+import com.razgailova.currencyexchange.domain.Injector;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+
+import static com.razgailova.currencyexchange.data.cache.CurrencyCache.RemoteDataStatus.*;
 
 /**
  * Created by Катерина on 15.11.2017.
@@ -23,62 +27,81 @@ public class CurrencyCache {
 
     private static CurrencyCache mInstance;
 
-    private List<SoftReference<CacheInitListener>> listeners = new ArrayList<>();
+    enum RemoteDataStatus {NONE, REQUESTING, LOADED, ERROR}
+
+    private RemoteDataStatus remoteDataStatus = NONE;
+
+    private SoftReference<CacheInitListener> cacheInitListener;
 
     private ExchangeRates mData;
+
+    private CurrencyRatesDatabase database = Injector.getInstance().injectCurrencyRatesDatabase();
 
     public static synchronized CurrencyCache getInstance() {
         if (mInstance == null) {
             mInstance = new CurrencyCache();
+            mInstance.initLocal();
         }
 
         return mInstance;
     }
 
-    public void init(@NonNull final CacheInitListener listener) {
-        listeners.add(new SoftReference<>(listener));
+    public void initLocal() {
+        mData = database.readExchangeRates();
+    }
 
-        ILoader loader = new LoadingManager(MyApplication.getContext());
+    public void initRemote(@NonNull final CacheInitListener listener) {
+        if (remoteDataStatus == LOADED) {
+            return;
+        }
 
-        loader.load(new LoadingListener() {
-            @Override
-            public void onDataLoaded(ExchangeRates data) {
-                mData = data;
+        cacheInitListener = new SoftReference<>(listener);
 
-                for (SoftReference<CacheInitListener> listenerReference: listeners) {
-                    CacheInitListener listener = listenerReference.get();
-                    if (listener != null) {
-                        listener.onInitFinished();
+        if (remoteDataStatus != REQUESTING) {
+            ILoader loader = new LoadingManager(MyApplication.getContext());
+
+            loader.load(new LoadingListener() {
+                @Override
+                public void onDataLoaded(ExchangeRates data) {
+                    saveRemoteData(data);
+                    remoteDataStatus = LOADED;
+
+                    if (cacheInitListener.get() != null && cacheInitListener.get() != null) {
+                        cacheInitListener.get().onInitFinished();
                     }
                 }
-            }
 
-            @Override
-            public void onError() {
-                // TODO
-            }
-        });
-    }
+                @Override
+                public void onError() {
+                    remoteDataStatus = ERROR;
 
-    public void addCacheInitListener(CacheInitListener listener){
-        listeners.add(new SoftReference<>(listener));
-    }
-
-    public void removeCacheInitListener(CacheInitListener listener){
-        for (Iterator<SoftReference<CacheInitListener>> iterator = listeners.iterator(); iterator.hasNext(); ) {
-            SoftReference<CacheInitListener> softReference = iterator.next();
-            if (softReference.get() == listener) {
-                iterator.remove();
-            }
+                    if (cacheInitListener.get() != null && cacheInitListener.get() != null) {
+                        cacheInitListener.get().onError();
+                    }
+                }
+            });
+            remoteDataStatus = REQUESTING;
         }
     }
 
-    public Collection<Volute> getCurrencyCollection() {
-        return mData.getCurrencyMap().values();
+    private void saveRemoteData(ExchangeRates exchangeRates){
+        Collections.sort(exchangeRates.getCurrencyList(), new Comparator<Volute>() {
+            @Override
+            public int compare(Volute o1, Volute o2) {
+                return Integer.valueOf(o1.getNumCode()).compareTo(o2.getNumCode());
+            }
+        });
+        mData = exchangeRates;
+        database.storeCurrencyRates(exchangeRates);
+        database.closeDatabase(); // we done all we need with database
     }
 
-    public Volute getCurrencyById(String id) {
-        return mData.getCurrency(id);
+    public void removeCacheInitListener() {
+        cacheInitListener = null;
+    }
+
+    public ArrayList<Volute> getCurrencyCollection() {
+        return mData.getCurrencyList();
     }
 
 }

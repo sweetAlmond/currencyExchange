@@ -6,7 +6,6 @@ import android.os.Message;
 
 import com.razgailova.currencyexchange.data.cache.parser.SmartXmlParser;
 import com.razgailova.currencyexchange.data.cache.provider.DefaultCurrencyProvider;
-import com.razgailova.currencyexchange.data.cache.provider.LocalCurrencyProvider;
 import com.razgailova.currencyexchange.data.ExchangeRates;
 
 /**
@@ -29,9 +28,9 @@ public class LoadLocalRunnable implements Runnable {
 
         try {
             ExchangeRates data = new DefaultCurrencyProvider().getCurrency(mContext, new SmartXmlParser());
-            completeMessage = mHandler.obtainMessage(LoadingState.LOCAL.getValue(), data);
+            completeMessage = mHandler.obtainMessage(LoadingState.DATA.getValue(), data);
         } catch (Exception e) {
-            completeMessage = mHandler.obtainMessage(LoadingState.FATAL_ERROR.getValue(), null);
+            completeMessage = mHandler.obtainMessage(LoadingState.ERROR.getValue(), null);
         }
 
         completeMessage.sendToTarget();

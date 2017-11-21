@@ -23,27 +23,17 @@ public class LoadingManager implements ILoader {
 
     @SuppressLint("HandlerLeak")
     private Handler mLoadingHandler = new Handler() {
-
-        private boolean mProcessed = false;
-
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (LoadingState.fromInt(msg.what)) {
-                case DEFAULT:
-                case LOCAL:
-                case SERVER:
-                    if(!mProcessed) {
-                        mLoadingListener.onDataLoaded((ExchangeRates) msg.obj);
-                        mProcessed = true;
-                    }
+                case DATA:
+                    mLoadingListener.onDataLoaded((ExchangeRates) msg.obj);
                     break;
+
                 case ERROR:
-                    // работаем со значениями из локального хранилища
+                    mLoadingListener.onError();
                     break;
-                case FATAL_ERROR:
-                    // не можем продолжать работу
-                    throw new RuntimeException("Не загрузились данные из локального хранилища");
             }
         }
     };
@@ -57,5 +47,4 @@ public class LoadingManager implements ILoader {
     private void load(Runnable runnable) {
         new Thread(runnable).start();
     }
-
 }

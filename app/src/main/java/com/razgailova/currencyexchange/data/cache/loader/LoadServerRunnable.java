@@ -28,7 +28,7 @@ public class LoadServerRunnable implements Runnable {
 
         try {
             ExchangeRates data = new ServiceCurrencyProvider().getCurrency(mContext, new SmartXmlParser());
-            completeMessage = mHandler.obtainMessage(LoadingState.SERVER.getValue(), data);
+            completeMessage = mHandler.obtainMessage(LoadingState.DATA.getValue(), data);
         } catch (Exception e) {
             completeMessage = mHandler.obtainMessage(LoadingState.ERROR.getValue(), null);
         }

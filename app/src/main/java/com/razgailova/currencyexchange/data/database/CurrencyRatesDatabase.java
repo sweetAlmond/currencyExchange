@@ -10,7 +10,6 @@ import com.razgailova.currencyexchange.data.model.Volute;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +21,7 @@ import com.razgailova.currencyexchange.data.database.CurrencyRateContract.Metada
  */
 
 public class CurrencyRatesDatabase {
+
     private CurrencyRatesDbHelper dbHelper;
 
     public CurrencyRatesDatabase(CurrencyRatesDbHelper dbHelper) {
@@ -29,25 +29,16 @@ public class CurrencyRatesDatabase {
     }
 
     public void storeCurrencyRates(ExchangeRates exchangeRates){
-        clearRates();
-        clearMetadata();
+        dbHelper.clearTables(dbHelper.getWritableDatabase());
 
-        storeRates(exchangeRates.getCurrencyMap());
+        storeRates(exchangeRates.getCurrencyList());
         storeMetadata(exchangeRates.getDate());
     }
 
-    private void clearRates(){
-        dbHelper.getWritableDatabase().execSQL(CurrencyRatesDbHelper.SQL_DELETE_RATES);
-    }
-
-    private void clearMetadata(){
-        dbHelper.getWritableDatabase().execSQL(CurrencyRatesDbHelper.SQL_DELETE_METADATA);
-    }
-
-    private void storeRates(Map<String, Volute> volutes){
+    private void storeRates(ArrayList<Volute> volutes){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        for (Volute volute : volutes.values()) {
+        for (Volute volute : volutes) {
             ContentValues values = new ContentValues();
             values.put(RatesEntry.COLUMN_NAME_ID, volute.getId());
             values.put(RatesEntry.COLUMN_NAME_NUM_CODE, volute.getNumCode());
@@ -70,13 +61,13 @@ public class CurrencyRatesDatabase {
     }
 
     public ExchangeRates readExchangeRates(){
-        Map<String, Volute> voluteMap = readCurrencyRates();
+        ArrayList<Volute> voluteList = readCurrencyRates();
         Date date = readRatesMetadata();
 
-        return new ExchangeRates(date, voluteMap);
+        return new ExchangeRates(date, voluteList);
     }
 
-    private Map<String, Volute> readCurrencyRates(){
+    private ArrayList<Volute> readCurrencyRates(){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -88,10 +79,10 @@ public class CurrencyRatesDatabase {
                 RatesEntry.COLUMN_NAME_VALUE
         };
 
-        Cursor cursor = db.query(CurrencyRateContract.RatesEntry.TABLE_NAME, projection,
+        Cursor cursor = db.query(RatesEntry.TABLE_NAME, projection,
                 null, null, null, null, null);
 
-        Map<String, Volute> currencyRates = new HashMap<>();
+        ArrayList<Volute> currencyRates = new ArrayList<>();
         while(cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndexOrThrow(RatesEntry.COLUMN_NAME_ID));
             int numCode = cursor.getInt(cursor.getColumnIndexOrThrow(RatesEntry.COLUMN_NAME_NUM_CODE));
@@ -102,7 +93,7 @@ public class CurrencyRatesDatabase {
             BigDecimal value = new BigDecimal(strValue);
 
             Volute volute = new Volute(id, numCode, charCode, nominal, name, value);
-            currencyRates.put(name, volute);
+            currencyRates.add(volute);
         }
         cursor.close();
 

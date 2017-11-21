@@ -8,6 +8,7 @@ import com.razgailova.currencyexchange.domain.usecase.ExchangeRatesUseCase;
 import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -28,7 +29,7 @@ public class VoluteConverterPresenter extends BasePresenter<VoluteConverterView>
     public void bindView(@NonNull VoluteConverterView view) {
         super.bindView(view);
 
-        exchangeRatesUseCase.subscribeToUpdates(this);
+        exchangeRatesUseCase.requestExchangeRates(this);
 
         view.showVolutesAndRates(exchangeRatesUseCase.getCurrencies());
     }
@@ -51,7 +52,12 @@ public class VoluteConverterPresenter extends BasePresenter<VoluteConverterView>
 
     @Override
     public void onInitFinished() {
-        Collection<Volute> volutes = exchangeRatesUseCase.getCurrencies();
+        ArrayList<Volute> volutes = exchangeRatesUseCase.getCurrencies();
         view.updateVolutesAndRates(volutes);
+    }
+
+    @Override
+    public void onError() {
+        // todo show error
     }
 }

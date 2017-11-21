@@ -5,7 +5,7 @@ package com.razgailova.currencyexchange.data.cache.loader;
  */
 
 public enum LoadingState {
-    DEFAULT(0), LOCAL(1), SERVER(2), ERROR(3), FATAL_ERROR(4);
+    DATA(0), ERROR(1);
 
     private final int value;
 

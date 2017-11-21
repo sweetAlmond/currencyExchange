@@ -1,7 +1,9 @@
 package com.razgailova.currencyexchange.domain;
 
+import com.razgailova.currencyexchange.MyApplication;
+import com.razgailova.currencyexchange.data.database.CurrencyRatesDatabase;
+import com.razgailova.currencyexchange.data.database.CurrencyRatesDbHelper;
 import com.razgailova.currencyexchange.domain.converter.CurrencyConverter;
-import com.razgailova.currencyexchange.domain.converter.ICurrencyConverter;
 import com.razgailova.currencyexchange.domain.usecase.ConvertVoluteUseCase;
 import com.razgailova.currencyexchange.domain.usecase.ExchangeRatesUseCase;
 
@@ -26,5 +28,9 @@ public class Injector {
 
     public ExchangeRatesUseCase injectExchangeRatesUseCase(){
         return new ExchangeRatesUseCase();
+    }
+
+    public CurrencyRatesDatabase injectCurrencyRatesDatabase(){
+        return new CurrencyRatesDatabase(new CurrencyRatesDbHelper(MyApplication.getContext()));
     }
 }

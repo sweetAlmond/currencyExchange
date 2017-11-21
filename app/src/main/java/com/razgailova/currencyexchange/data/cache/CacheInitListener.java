@@ -6,4 +6,5 @@ package com.razgailova.currencyexchange.data.cache;
 
 public interface CacheInitListener {
     void onInitFinished();
+    void onError();
 }

@@ -26,17 +26,13 @@ public class CurrencyConverter implements ICurrencyConverter {
 
         BigDecimal convertedValue = amount
                 .multiply(normalize(voluteFrom))
-                .divide(normalize(voluteTo));
+                .divide(normalize(voluteTo), 4, BigDecimal.ROUND_HALF_EVEN);
 
-        return round(convertedValue);
+        return convertedValue;
     }
 
     private BigDecimal normalize(Volute volute){
         return volute.getValue().divide(new BigDecimal(volute.getNominal()));
-    }
-
-    private BigDecimal round(BigDecimal amount){
-        return amount.setScale(4, BigDecimal.ROUND_HALF_EVEN);
     }
 
     private boolean checkVoluteValidity(Volute volute){

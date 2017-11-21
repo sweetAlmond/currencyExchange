@@ -1,10 +1,10 @@
 package com.razgailova.currencyexchange.presentation.screens.converter;
 
-import com.razgailova.currencyexchange.data.ExchangeRates;
 import com.razgailova.currencyexchange.data.model.Volute;
 import com.razgailova.currencyexchange.presentation.mvp.base.BaseView;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -15,9 +15,9 @@ public interface VoluteConverterView extends BaseView {
 
     void showConversionResult(BigDecimal result);
 
-    void showVolutesAndRates(Collection<Volute> volutes);
+    void showVolutesAndRates(ArrayList<Volute> volutes);
 
-    void updateVolutesAndRates(Collection<Volute> volutes);
+    void updateVolutesAndRates(ArrayList<Volute> volutes);
 
     void showConversionError(String error);
 
