@@ -1,5 +1,8 @@
 package com.razgailova.currencyexchange.presentation.screens.converter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -74,6 +77,8 @@ public class VoluteConverterActivity extends AppCompatActivity implements Volute
                 presenter.onConvertVolutePressed(getAmount(), getVoluteFrom(), getVoluteTo());
             }
         });
+
+        buttonConvert.setEnabled(false);
     }
 
     @Override
@@ -115,7 +120,7 @@ public class VoluteConverterActivity extends AppCompatActivity implements Volute
     }
 
     private ArrayAdapter<Volute> createVolutesAdapter(Collection<Volute> spinnerCollection){
-        ArrayAdapter<Volute> spinnerArrayAdapter = new ArrayAdapter<Volute>
+        ArrayAdapter<Volute> spinnerArrayAdapter = new ArrayAdapter<>
                 (this, android.R.layout.simple_spinner_item, new ArrayList<>(spinnerCollection));
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout
                 .simple_spinner_dropdown_item);
@@ -130,5 +135,23 @@ public class VoluteConverterActivity extends AppCompatActivity implements Volute
     @Override
     public void showConversionError(String error) {
         Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showInitError(String error) {
+        AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this);
+        }
+        builder.setTitle(R.string.dialog_title_error)
+                .setMessage(error)
+                .setPositiveButton(R.string.button_retry, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        presenter.requestExchangeRates();
+                    }
+                })
+                .show();
     }
 }

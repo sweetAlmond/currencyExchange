@@ -1,7 +1,6 @@
 package com.razgailova.currencyexchange.presentation.screens.start;
 
 import android.support.annotation.NonNull;
-import android.text.method.DialerKeyListener;
 
 import com.razgailova.currencyexchange.domain.usecase.ExchangeRatesUseCase;
 import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
@@ -31,25 +30,25 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
         }
     }
 
-    private void unSubscribeFromUpdates(){
+    private void unSubscribeFromExchangeRatesUpdates(){
         exchangeRatesUseCase.removeRequestExchangeRatesListener();
     }
 
     @Override
     public void onInitFinished() {
-        unSubscribeFromUpdates();
+        unSubscribeFromExchangeRatesUpdates();
         view.showConverterScreen();
     }
 
     @Override
-    public void onError(String error) {
-        unSubscribeFromUpdates();
+    public void onInitError(String error) {
+        unSubscribeFromExchangeRatesUpdates();
         view.showErrorDialog(error);
     }
 
     @Override
     public void unbindView() {
-        unSubscribeFromUpdates();
+        unSubscribeFromExchangeRatesUpdates();
         super.unbindView();
     }
 }

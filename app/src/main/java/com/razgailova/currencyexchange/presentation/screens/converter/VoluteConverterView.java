@@ -21,4 +21,5 @@ public interface VoluteConverterView extends BaseView {
 
     void showConversionError(String error);
 
+    void showInitError(String error);
 }

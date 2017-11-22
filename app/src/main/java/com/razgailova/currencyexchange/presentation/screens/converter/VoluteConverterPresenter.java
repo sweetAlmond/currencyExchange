@@ -28,16 +28,24 @@ public class VoluteConverterPresenter extends BasePresenter<VoluteConverterView>
     public void bindView(@NonNull VoluteConverterView view) {
         super.bindView(view);
 
-        exchangeRatesUseCase.requestExchangeRates(this);
+        requestExchangeRates();
 
         view.showVolutesAndRates(exchangeRatesUseCase.getCurrencies());
     }
 
+    public void requestExchangeRates(){
+        exchangeRatesUseCase.requestExchangeRates(this);
+    }
+
     @Override
     public void unbindView() {
-        exchangeRatesUseCase.removeRequestExchangeRatesListener();
+        unSubscribeFromExchangeRatesUpdates();
 
         super.unbindView();
+    }
+
+    private void unSubscribeFromExchangeRatesUpdates(){
+        exchangeRatesUseCase.removeRequestExchangeRatesListener();
     }
 
     public void onConvertVolutePressed(BigDecimal amount, Volute voluteFrom, Volute voluteTo){
@@ -45,18 +53,20 @@ public class VoluteConverterPresenter extends BasePresenter<VoluteConverterView>
             BigDecimal result = converterUseCase.convertVolute(amount, voluteFrom, voluteTo);
             view.showConversionResult(result);
         } catch (Exception e) {
-            view.showConversionError(e.getMessage()); // todo make better error handling
+            view.showConversionError(e.getMessage());
         }
     }
 
     @Override
     public void onInitFinished() {
         ArrayList<Volute> volutes = exchangeRatesUseCase.getCurrencies();
+        unSubscribeFromExchangeRatesUpdates();
         view.updateVolutesAndRates(volutes);
     }
 
     @Override
-    public void onError(String error) {
-        // todo show error
+    public void onInitError(String error) {
+        view.showInitError(error);
+        unSubscribeFromExchangeRatesUpdates();
     }
 }

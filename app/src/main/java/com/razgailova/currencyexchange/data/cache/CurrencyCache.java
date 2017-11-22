@@ -74,7 +74,7 @@ public class CurrencyCache implements ICurrencyCache{
                     remoteDataStatus = ERROR;
 
                     if (mCacheInitListener.get() != null && mCacheInitListener.get() != null) {
-                        mCacheInitListener.get().onError(error);
+                        mCacheInitListener.get().onInitError(error);
                     }
                 }
             });
