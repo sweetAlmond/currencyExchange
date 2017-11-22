@@ -9,7 +9,6 @@ import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Катерина on 19.11.2017.
@@ -36,7 +35,7 @@ public class VoluteConverterPresenter extends BasePresenter<VoluteConverterView>
 
     @Override
     public void unbindView() {
-        exchangeRatesUseCase.unSubscribeFromUpdates(this);
+        exchangeRatesUseCase.removeRequestExchangeRatesListener();
 
         super.unbindView();
     }
@@ -57,7 +56,7 @@ public class VoluteConverterPresenter extends BasePresenter<VoluteConverterView>
     }
 
     @Override
-    public void onError() {
+    public void onError(String error) {
         // todo show error
     }
 }

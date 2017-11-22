@@ -21,7 +21,7 @@ import java.util.Locale;
  * Created by Катерина on 18.11.2017.
  */
 
-public class SmartXmlParser implements IParser {
+public class SmartXmlParser implements IXmlParser {
 
     private static final String DATE_FORMAT = "dd.MM.yyyy";
 

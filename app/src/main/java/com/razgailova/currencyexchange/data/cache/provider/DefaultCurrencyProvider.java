@@ -12,7 +12,7 @@ import java.io.InputStream;
  * Created by Катерина on 16.11.2017.
  */
 
-public class DefaultCurrencyProvider extends CurrencyProvider {
+public class DefaultCurrencyProvider extends ICurrencyProvider {
 
     @Override
     protected String load(Context context) throws IOException {

@@ -23,7 +23,7 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
     }
 
     private void requestExchangeRates(){
-        if (exchangeRatesUseCase.getCurrencies().size() == 0) {
+        if (exchangeRatesUseCase.isLocalStorageEmpty()) {
             exchangeRatesUseCase.requestExchangeRates(this);
         } else {
             view.showConverterScreen();
@@ -31,7 +31,7 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
     }
 
     private void unSubscribeFromUpdates(){
-        exchangeRatesUseCase.unSubscribeFromUpdates(this);
+        exchangeRatesUseCase.removeRequestExchangeRatesListener();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
     }
 
     @Override
-    public void onError() {
+    public void onError(String error) {
         unSubscribeFromUpdates();
         // todo show error and retry
     }

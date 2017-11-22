@@ -8,7 +8,7 @@ import com.razgailova.currencyexchange.data.ExchangeRates;
  * Created by Катерина on 18.11.2017.
  */
 
-public interface IParser {
+public interface IXmlParser {
 
     ExchangeRates parse(@NonNull String xml) throws Exception;
 }

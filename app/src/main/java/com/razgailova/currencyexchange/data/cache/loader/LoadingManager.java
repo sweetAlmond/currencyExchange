@@ -6,16 +6,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
+import com.razgailova.currencyexchange.Injector;
 import com.razgailova.currencyexchange.data.ExchangeRates;
 
 /**
  * Created by Катерина on 15.11.2017.
  */
 
-public class LoadingManager implements ILoader {
+public class LoadingManager implements ILoadingManager {
 
     private Context mContext;
-    private LoadingListener mLoadingListener;
+    private ILoadingListener mLoadingListener;
 
     public LoadingManager(Context context) {
         mContext = context;
@@ -32,16 +33,19 @@ public class LoadingManager implements ILoader {
                     break;
 
                 case ERROR:
-                    mLoadingListener.onError();
+                    mLoadingListener.onError("Can't download exchange rates");
                     break;
             }
         }
     };
 
-    public void load(@NonNull LoadingListener listener) {
+    public void load(@NonNull ILoadingListener listener) {
         mLoadingListener = listener;
-        load(new LoadLocalRunnable(mContext, mLoadingHandler));
-//        load(new LoadServerRunnable(mContext, mLoadingHandler));
+        load(new LoadExchangeRatesRunnable(
+                mContext,
+                mLoadingHandler,
+                Injector.getInstance().injectCurrencyProvider(),
+                Injector.getInstance().injectParser()));
     }
 
     private void load(Runnable runnable) {

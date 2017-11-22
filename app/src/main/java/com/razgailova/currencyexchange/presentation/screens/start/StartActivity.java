@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.razgailova.currencyexchange.domain.Injector;
+import com.razgailova.currencyexchange.Injector;
 import com.razgailova.currencyexchange.presentation.screens.converter.VoluteConverterActivity;
 
 public class StartActivity extends AppCompatActivity implements StartView {

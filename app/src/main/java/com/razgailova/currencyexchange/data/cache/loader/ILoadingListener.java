@@ -6,9 +6,9 @@ import com.razgailova.currencyexchange.data.ExchangeRates;
  * Created by Катерина on 16.11.2017.
  */
 
-public interface LoadingListener {
+public interface ILoadingListener {
 
     void onDataLoaded(ExchangeRates data);
 
-    void onError();
+    void onError(String string);
 }

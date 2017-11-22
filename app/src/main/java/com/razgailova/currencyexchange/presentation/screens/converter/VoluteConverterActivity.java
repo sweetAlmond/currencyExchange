@@ -9,13 +9,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.razgailova.currencyexchange.R;
 import com.razgailova.currencyexchange.data.model.Volute;
-import com.razgailova.currencyexchange.domain.Injector;
+import com.razgailova.currencyexchange.Injector;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

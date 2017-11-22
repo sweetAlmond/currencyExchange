@@ -2,18 +2,15 @@ package com.razgailova.currencyexchange.data.cache;
 
 import android.support.annotation.NonNull;
 
-import com.razgailova.currencyexchange.MyApplication;
 import com.razgailova.currencyexchange.data.ExchangeRates;
-import com.razgailova.currencyexchange.data.cache.loader.ILoader;
-import com.razgailova.currencyexchange.data.cache.loader.LoadingListener;
-import com.razgailova.currencyexchange.data.cache.loader.LoadingManager;
+import com.razgailova.currencyexchange.data.cache.loader.ILoadingManager;
+import com.razgailova.currencyexchange.data.cache.loader.ILoadingListener;
 import com.razgailova.currencyexchange.data.database.CurrencyRatesDatabase;
 import com.razgailova.currencyexchange.data.model.Volute;
-import com.razgailova.currencyexchange.domain.Injector;
+import com.razgailova.currencyexchange.Injector;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -23,7 +20,7 @@ import static com.razgailova.currencyexchange.data.cache.CurrencyCache.RemoteDat
  * Created by Катерина on 15.11.2017.
  */
 
-public class CurrencyCache {
+public class CurrencyCache implements ICurrencyCache{
 
     private static CurrencyCache mInstance;
 
@@ -31,11 +28,13 @@ public class CurrencyCache {
 
     private RemoteDataStatus remoteDataStatus = NONE;
 
-    private SoftReference<CacheInitListener> cacheInitListener;
+    private SoftReference<CacheInitListener> mCacheInitListener;
 
-    private ExchangeRates mData;
+    private ExchangeRates mExchangeRates;
 
-    private CurrencyRatesDatabase database = Injector.getInstance().injectCurrencyRatesDatabase();
+    private CurrencyRatesDatabase mDatabase = Injector.getInstance().injectCurrencyRatesDatabase();
+
+    private ILoadingManager mLoadingManager = Injector.getInstance().injectLoadingManager();
 
     public static synchronized CurrencyCache getInstance() {
         if (mInstance == null) {
@@ -46,37 +45,36 @@ public class CurrencyCache {
         return mInstance;
     }
 
-    public void initLocal() {
-        mData = database.readExchangeRates();
+    private void initLocal() {
+        mExchangeRates = mDatabase.readExchangeRates();
     }
 
+    @Override
     public void initRemote(@NonNull final CacheInitListener listener) {
         if (remoteDataStatus == LOADED) {
             return;
         }
 
-        cacheInitListener = new SoftReference<>(listener);
+        mCacheInitListener = new SoftReference<>(listener);
 
         if (remoteDataStatus != REQUESTING) {
-            ILoader loader = new LoadingManager(MyApplication.getContext());
-
-            loader.load(new LoadingListener() {
+            mLoadingManager.load(new ILoadingListener() {
                 @Override
                 public void onDataLoaded(ExchangeRates data) {
                     saveRemoteData(data);
                     remoteDataStatus = LOADED;
 
-                    if (cacheInitListener.get() != null && cacheInitListener.get() != null) {
-                        cacheInitListener.get().onInitFinished();
+                    if (mCacheInitListener.get() != null && mCacheInitListener.get() != null) {
+                        mCacheInitListener.get().onInitFinished();
                     }
                 }
 
                 @Override
-                public void onError() {
+                public void onError(String error) {
                     remoteDataStatus = ERROR;
 
-                    if (cacheInitListener.get() != null && cacheInitListener.get() != null) {
-                        cacheInitListener.get().onError();
+                    if (mCacheInitListener.get() != null && mCacheInitListener.get() != null) {
+                        mCacheInitListener.get().onError(error);
                     }
                 }
             });
@@ -91,17 +89,18 @@ public class CurrencyCache {
                 return Integer.valueOf(o1.getNumCode()).compareTo(o2.getNumCode());
             }
         });
-        mData = exchangeRates;
-        database.storeCurrencyRates(exchangeRates);
-        database.closeDatabase(); // we done all we need with database
+        mExchangeRates = exchangeRates;
+        mDatabase.storeCurrencyRates(exchangeRates);
+        mDatabase.closeDatabase(); // we done all we need with mDatabase
     }
 
-    public void removeCacheInitListener() {
-        cacheInitListener = null;
+    @Override
+    public void removeRemoteInitListener() {
+        mCacheInitListener = null;
     }
 
+    @Override
     public ArrayList<Volute> getCurrencyCollection() {
-        return mData.getCurrencyList();
+        return mExchangeRates != null ? mExchangeRates.getCurrencyList() : null;
     }
-
 }
