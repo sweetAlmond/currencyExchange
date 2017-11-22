@@ -9,4 +9,6 @@ import com.razgailova.currencyexchange.presentation.mvp.base.BaseView;
 public interface StartView extends BaseView {
 
     void showConverterScreen();
+
+    void showErrorDialog(String text);
 }

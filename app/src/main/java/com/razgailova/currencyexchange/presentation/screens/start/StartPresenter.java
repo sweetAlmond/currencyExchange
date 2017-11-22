@@ -1,6 +1,7 @@
 package com.razgailova.currencyexchange.presentation.screens.start;
 
 import android.support.annotation.NonNull;
+import android.text.method.DialerKeyListener;
 
 import com.razgailova.currencyexchange.domain.usecase.ExchangeRatesUseCase;
 import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
@@ -12,7 +13,7 @@ import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
 public class StartPresenter extends BasePresenter<StartView> implements ExchangeRatesUseCase.ExchangeRateUpdateListener {
     private ExchangeRatesUseCase exchangeRatesUseCase;
 
-    public StartPresenter(ExchangeRatesUseCase exchangeRatesUseCase){
+    StartPresenter(ExchangeRatesUseCase exchangeRatesUseCase){
         this.exchangeRatesUseCase = exchangeRatesUseCase;
     }
 
@@ -22,7 +23,7 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
         requestExchangeRates();
     }
 
-    private void requestExchangeRates(){
+    public void requestExchangeRates(){
         if (exchangeRatesUseCase.isLocalStorageEmpty()) {
             exchangeRatesUseCase.requestExchangeRates(this);
         } else {
@@ -43,7 +44,7 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
     @Override
     public void onError(String error) {
         unSubscribeFromUpdates();
-        // todo show error and retry
+        view.showErrorDialog(error);
     }
 
     @Override
