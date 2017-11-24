@@ -64,7 +64,7 @@ public class CurrencyCache implements ICurrencyCache{
                     saveRemoteData(data);
                     remoteDataStatus = LOADED;
 
-                    if (mCacheInitListener.get() != null && mCacheInitListener.get() != null) {
+                    if (mCacheInitListener!= null && mCacheInitListener.get() != null) {
                         mCacheInitListener.get().onInitFinished();
                     }
                 }
@@ -73,7 +73,7 @@ public class CurrencyCache implements ICurrencyCache{
                 public void onError(String error) {
                     remoteDataStatus = ERROR;
 
-                    if (mCacheInitListener.get() != null && mCacheInitListener.get() != null) {
+                    if (mCacheInitListener != null && mCacheInitListener.get() != null) {
                         mCacheInitListener.get().onInitError(error);
                     }
                 }
@@ -95,8 +95,10 @@ public class CurrencyCache implements ICurrencyCache{
     }
 
     @Override
-    public void removeRemoteInitListener() {
-        mCacheInitListener = null;
+    public void removeRemoteInitListener(@NonNull final CacheInitListener listener) {
+        if (mCacheInitListener != null && mCacheInitListener.get() != null && mCacheInitListener.get().equals(listener)) {
+            mCacheInitListener = null;
+        }
     }
 
     @Override

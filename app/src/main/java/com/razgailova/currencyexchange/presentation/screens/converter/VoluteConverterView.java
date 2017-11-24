@@ -5,7 +5,6 @@ import com.razgailova.currencyexchange.presentation.mvp.base.BaseView;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Катерина on 19.11.2017.
@@ -13,11 +12,17 @@ import java.util.Collection;
 
 public interface VoluteConverterView extends BaseView {
 
+    void setConversionEnabled(boolean enabled);
+
     void showConversionResult(BigDecimal result);
 
-    void showVolutesAndRates(ArrayList<Volute> volutes);
+    void hideConversionResult();
 
-    void updateVolutesAndRates(ArrayList<Volute> volutes);
+    void initCurrenciesSpinners(ArrayList<Volute> volutes,Volute selectedVoluteFrom, Volute selectedVoluteTo);
+
+    void initAmountField(String amountText);
+
+    void updateVolutesAndRates(ArrayList<Volute> volutes, Volute selectedVoluteFrom, Volute selectedVoluteTo);
 
     void showConversionError(String error);
 

@@ -30,8 +30,8 @@ public class ExchangeRatesUseCase {
         mCurrencyCache.initRemote(listener);
     }
 
-    public void removeRequestExchangeRatesListener() {
-        mCurrencyCache.removeRemoteInitListener();
+    public void removeRequestExchangeRatesListener(ExchangeRateUpdateListener listener) {
+        mCurrencyCache.removeRemoteInitListener(listener);
     }
 
     public interface ExchangeRateUpdateListener extends CacheInitListener {}

@@ -4,6 +4,7 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  */
 
 @Root(name = "Valute")
-public class Volute {
+public class Volute implements Serializable{
 
     public Volute(){}
 

@@ -1,6 +1,7 @@
 package com.razgailova.currencyexchange.presentation.screens.start;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.razgailova.currencyexchange.domain.usecase.ExchangeRatesUseCase;
 import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
@@ -9,12 +10,14 @@ import com.razgailova.currencyexchange.presentation.mvp.base.BasePresenter;
  * Created by Катерина on 20.11.2017.
  */
 
-public class StartPresenter extends BasePresenter<StartView> implements ExchangeRatesUseCase.ExchangeRateUpdateListener {
+public class StartPresenter extends BasePresenter<StartView, StubState> implements ExchangeRatesUseCase.ExchangeRateUpdateListener {
     private ExchangeRatesUseCase exchangeRatesUseCase;
 
     StartPresenter(ExchangeRatesUseCase exchangeRatesUseCase){
         this.exchangeRatesUseCase = exchangeRatesUseCase;
     }
+
+    @Override public void readState(@Nullable StubState state) {}
 
     @Override
     public void bindView(@NonNull StartView view) {
@@ -31,7 +34,7 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
     }
 
     private void unSubscribeFromExchangeRatesUpdates(){
-        exchangeRatesUseCase.removeRequestExchangeRatesListener();
+        exchangeRatesUseCase.removeRequestExchangeRatesListener(this);
     }
 
     @Override
@@ -50,5 +53,11 @@ public class StartPresenter extends BasePresenter<StartView> implements Exchange
     public void unbindView() {
         unSubscribeFromExchangeRatesUpdates();
         super.unbindView();
+    }
+
+    @NonNull
+    @Override
+    public StubState getState() {
+        return new StubState();
     }
 }

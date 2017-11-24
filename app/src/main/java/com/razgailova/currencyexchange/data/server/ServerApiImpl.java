@@ -1,11 +1,5 @@
 package com.razgailova.currencyexchange.data.server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 /**
  * Created by Катерина on 22.11.2017.
  */

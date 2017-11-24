@@ -14,7 +14,7 @@ public interface ICurrencyCache {
 
     void initRemote(@NonNull final CacheInitListener listener);
 
-    void removeRemoteInitListener();
+    void removeRemoteInitListener(@NonNull final CacheInitListener listener);
 
     ArrayList<Volute> getCurrencyCollection();
 

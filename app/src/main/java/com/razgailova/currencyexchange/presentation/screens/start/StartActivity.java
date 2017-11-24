@@ -3,7 +3,6 @@ package com.razgailova.currencyexchange.presentation.screens.start;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -21,16 +20,16 @@ public class StartActivity extends AppCompatActivity implements StartView {
         presenter = new StartPresenter(Injector.getInstance().injectExchangeRatesUseCase());
     }
 
-    @Override
-    protected void onResume() {
+
+    @Override protected void onResume() {
         super.onResume();
         presenter.bindView(this);
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
         presenter.unbindView();
-        super.onPause();
+        super.onStop();
     }
 
     @Override
@@ -41,13 +40,8 @@ public class StartActivity extends AppCompatActivity implements StartView {
 
     @Override
     public void showErrorDialog(String text) {
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(this);
-        }
-        builder.setTitle(R.string.dialog_title_error)
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_error)
                 .setMessage(text)
                 .setPositiveButton(R.string.button_retry, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -57,4 +51,5 @@ public class StartActivity extends AppCompatActivity implements StartView {
                 .setCancelable(false)
                 .show();
     }
+
 }
