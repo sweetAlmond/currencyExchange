@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CurrencyExchange</string>
+
+    <string name="dialog_title_error">Error</string>
+    <string name="button_retry">Retry</string>
+
+    <string name="exchange_rates_updated">Exchange rates have been updated</string>
+    <string name="is">is</string>
+    <string name="button_convert">Convert</string>
 </resources>
